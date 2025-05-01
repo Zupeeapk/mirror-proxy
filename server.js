@@ -2,30 +2,26 @@ const express = require("express");
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const app = express();
-const target = "https://animixplay.st";
 
 app.use("/", createProxyMiddleware({
-  target,
+  target: "https://animixplay.st",
   changeOrigin: true,
   selfHandleResponse: false,
-
-  // Remove compression to allow future HTML rewriting (if needed)
-  onProxyReq: (proxyReq) => {
-    proxyReq.removeHeader("accept-encoding");
+  followRedirects: true,
+  headers: {
+    "User-Agent": "Mozilla/5.0",
+    "Referer": "https://animixplay.st"
   },
-
-  // Rewrites redirect responses (Location header)
   onProxyRes: (proxyRes, req, res) => {
-    const locationHeader = proxyRes.headers["location"];
-    if (locationHeader && locationHeader.startsWith(target)) {
-      proxyRes.headers["location"] = locationHeader.replace(
-        target,
-        `${req.protocol}://${req.get("host")}`
+    // Remove or replace redirect headers to stay inside the proxy
+    const locationHeader = proxyRes.headers['location'];
+    if (locationHeader && locationHeader.startsWith('https://animixplay.st')) {
+      proxyRes.headers['location'] = locationHeader.replace(
+        'https://animixplay.st',
+        req.protocol + '://' + req.get('host')
       );
     }
-  },
-
-  pathRewrite: { "^/": "/" }
+  }
 }));
 
 const PORT = process.env.PORT || 3000;
