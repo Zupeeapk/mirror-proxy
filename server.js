@@ -1,15 +1,15 @@
 const express = require("express");
 const { createProxyMiddleware } = require("http-proxy-middleware");
-const { Buffer } = require("buffer");
 
 const app = express();
-const target = "https://animixplay.st";
 
 app.use("/", createProxyMiddleware({
-  target,
+  target: "https://animixplay.st", // change this to your target site
   changeOrigin: true,
-  selfHandleResponse: true,
-  onProxyRes: async (proxyRes, req, res) => {
-    let body = Buffer.from([]);
+  pathRewrite: { "^/": "/" }
+}));
 
-    proxyRes.on("data
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(Proxy server running on port ${PORT});
+});
