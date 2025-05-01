@@ -1,8 +1,5 @@
-"scripts": {
-  "start": "node server.js"
-}
 {
-  "name": "mirror-site",
+  "name": "mirror-proxy",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
