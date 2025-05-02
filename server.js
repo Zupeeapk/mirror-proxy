@@ -3,7 +3,7 @@ const express = require('express');
 const { Buffer } = require('buffer');
 const app = express();
 
-const target = 'https://aniwatch.mom'; // Or animixplay if you’re proxying that
+const target = 'https://animixplay.st'; // Or animixplay if you’re proxying that
 
 app.use('/', createProxyMiddleware({
   target,
